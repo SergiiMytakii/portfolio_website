@@ -3,6 +3,7 @@ import 'package:portfolio_website/data/project_repository.dart';
 import 'package:portfolio_website/models/project.dart';
 import 'package:portfolio_website/ui/widgets/project_card.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:widget_mask/widget_mask.dart';
 
 class PortfolioPage extends StatefulWidget {
   const PortfolioPage({super.key});
@@ -30,68 +31,70 @@ class _PortfolioPageState extends State<PortfolioPage> {
       body: Column(
         children: [
           Expanded(
-            child: Stack(
-              children: [
-                Positioned(
-                  left: horisontalPositionOfCenter - 100,
-                  width: horisontalPositionOfCenter,
-                  child: CarouselSlider.builder(
+            child: WidgetMask(
+              blendMode: BlendMode.colorBurn,
+              mask: Container(
+                width: 300,
+                height: 200,
+                color: Colors.transparent,
+                child: CarouselSlider(
+                    carouselController: controller,
                     options: CarouselOptions(
-                      height: MediaQuery.of(context).size.height,
-                      enlargeFactor: 0.3,
-                      autoPlay: false,
-                      enlargeCenterPage: true,
-                      viewportFraction: 0.7,
-                      reverse: false,
-                      enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                      viewportFraction: 1,
                       enableInfiniteScroll: true,
                       scrollDirection: Axis.vertical,
-                      onPageChanged: (index, reason) {
-                        setState(() {
-                          page = index;
-                          controller.nextPage();
-                          // controller.animateTo(30,
-                          //     duration: const Duration(milliseconds: 500),
-                          //     curve: Curves.easeInOut);
-                        });
+                    ),
+                    items: projects.map(
+                      (project) {
+                        return Text(
+                          project.title,
+                          style: TextStyle(fontSize: 85),
+                          textAlign: TextAlign.center,
+                        );
+                      },
+                    ).toList()),
+              ),
+              child: SizedBox(
+                width: 500,
+                height: 500,
+                child: Row(
+                  children: [
+                    const SizedBox(
+                      width: 200,
+                    ),
+                    CarouselSlider.builder(
+                      options: CarouselOptions(
+                        height: MediaQuery.of(context).size.height,
+                        enlargeFactor: 0.3,
+                        autoPlay: false,
+                        enlargeCenterPage: true,
+                        viewportFraction: 0.7,
+                        reverse: false,
+                        enlargeStrategy: CenterPageEnlargeStrategy.zoom,
+                        enableInfiniteScroll: true,
+                        scrollDirection: Axis.vertical,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            page = index;
+                            controller.nextPage();
+                            // controller.animateTo(30,
+                            //     duration: const Duration(milliseconds: 500),
+                            //     curve: Curves.easeInOut);
+                          });
+                        },
+                      ),
+                      itemCount: projects.length,
+                      carouselController: controller,
+                      itemBuilder: (context, index, pageViewIndex) {
+                        final project = projects[index];
+                        return ProjectCard(
+                          project: project,
+                        );
                       },
                     ),
-                    itemCount: projects.length,
-                    carouselController: controller,
-                    itemBuilder: (context, index, pageViewIndex) {
-                      final project = projects[index];
-                      return ProjectCard(
-                        project: project,
-                      );
-                    },
-                  ),
+                  ],
                 ),
-                Positioned(
-                  right: horisontalPositionOfCenter - 150,
-                  top: verticalPositionOfCenter - 100,
-                  child: Container(
-                    width: 300,
-                    height: 200,
-                    color: Colors.transparent,
-                    child: CarouselSlider(
-                        carouselController: controller,
-                        options: CarouselOptions(
-                          viewportFraction: 1,
-                          enableInfiniteScroll: true,
-                          scrollDirection: Axis.vertical,
-                        ),
-                        items: projects.map(
-                          (project) {
-                            return Text(
-                              project.title,
-                              style: TextStyle(fontSize: 85),
-                              textAlign: TextAlign.center,
-                            );
-                          },
-                        ).toList()),
-                  ),
-                ),
-              ],
+              ),
             ),
           ),
         ],
