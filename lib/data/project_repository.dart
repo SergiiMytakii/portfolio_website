@@ -15,7 +15,7 @@ class ProjectRepository {
         description: 'This is the second project.',
       ),
       Project(
-        title: 'RestyleMe',
+        title: 'Restyle \n  Me',
         image: 'assets/images/restyleme.jpeg',
         description: 'This is the third project.',
       ),

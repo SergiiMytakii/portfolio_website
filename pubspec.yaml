@@ -23,4 +23,15 @@ flutter:
   assets:
     - assets/
     - assets/images/
+  fonts:
+    - family: MartianMono
+      fonts:
+        - asset: assets/fonts/MartianMono-Thin.ttf
+        - asset: assets/fonts/MartianMono-Bold.ttf
+        - asset: assets/fonts/MartianMono-SemiBold.ttf
+        - asset: assets/fonts/MartianMono-ExtraBold.ttf
+        - asset: assets/fonts/MartianMono-ExtraLight.ttf
+        - asset: assets/fonts/MartianMono-Light.ttf
+        - asset: assets/fonts/MartianMono-Medium.ttf
+        - asset: assets/fonts/MartianMono-Regular.ttf
 

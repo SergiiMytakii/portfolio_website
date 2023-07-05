@@ -1,14 +1,14 @@
 import 'package:flutter/widgets.dart';
+import 'package:portfolio_website/ui/project_page.dart';
 
 import '../../models/project.dart';
 
 class ProjectCard extends StatefulWidget {
-  const ProjectCard({
-    super.key,
-    required this.project,
-  });
+  const ProjectCard(
+      {super.key, required this.project, required this.initialProject});
 
   final Project project;
+  final int initialProject;
 
   @override
   State<ProjectCard> createState() => _ProjectCardState();
@@ -16,8 +16,6 @@ class ProjectCard extends StatefulWidget {
 
 class _ProjectCardState extends State<ProjectCard>
     with SingleTickerProviderStateMixin {
-  double finalRotation = 0;
-
   final GlobalKey widgetKey = GlobalKey();
   double position = 0;
   AnimationController? _animationController;
@@ -44,20 +42,48 @@ class _ProjectCardState extends State<ProjectCard>
 
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    return Container(
-      // width: screenWidth / 2,
-      key: widgetKey,
-      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
-      child: Transform.rotate(
-        // origin: Offset(0, 300),
-        // alignment: Alignment.bottomLeft,
-        angle: 10 / 360 + position / 3500,
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(8.0),
-          child: Image.asset(
-            widget.project.image,
-            fit: BoxFit.contain,
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                ProjectPage(
+              project: widget.project,
+              initialProject: widget.initialProject,
+            ),
+            transitionDuration:
+                const Duration(seconds: 1), // Set the duration here
+            transitionsBuilder:
+                (context, animation, secondaryAnimation, child) {
+              var begin = 0.0;
+              var end = 1.0;
+              var curve = Curves.easeInCirc;
+
+              var tween =
+                  Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+
+              return FadeTransition(
+                opacity: animation.drive(tween),
+                child: child,
+              );
+            },
+          ),
+        );
+      },
+      child: SizedBox(
+        key: widgetKey,
+        child: Transform.rotate(
+          angle: 10 / 360 + position / 3500,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8.0),
+            child: Hero(
+              tag: widget.project.title,
+              child: Image.asset(
+                widget.project.image,
+                fit: BoxFit.contain,
+              ),
+            ),
           ),
         ),
       ),
